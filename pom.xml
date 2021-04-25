@@ -32,6 +32,18 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+        <!--        演示强制版本 开始-->
+        <!--<dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.75</version>
+        </dependency>-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.6</version>
+        </dependency>
+        <!--        演示强制版本 结束-->
     </dependencies>
 
     <repositories>
@@ -72,6 +84,36 @@
 
     <build>
         <plugins>
+            <!--          PS:  演示maven-enforcer-plugin配置强制fastjson版本大于1.2.7-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>1.2</version>
+                <executions>
+                    <execution>
+                        <id>enforce-banned-dependencies</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <bannedDependencies>
+                                    <message>
+                                        <![CDATA[You are running an older version of Fastjson. This application requires at least Fastjson 1.2.7 .]]>
+                                    </message>
+                                    <excludes>
+                                        <exclude>com.alibaba</exclude>
+                                    </excludes>
+                                    <includes>
+                                        <include>com.alibaba:fastjson:[1.2.7,]:jar</include>
+                                    </includes>
+                                </bannedDependencies>
+                            </rules>
+                            <fail>true</fail>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
